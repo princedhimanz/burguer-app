@@ -14,13 +14,13 @@ const Burger = ({ ingredients }) => {
         return <BurgerIngredient key={igName + i} type={igName} />;
       });
     })
+    // Flatten the array of arrays into a single array to check if no ingredients passed
     .reduce((prev, curr) => {
       return prev.concat(curr);
     }, []);
   if (transformedIngredients.length === 0) {
     transformedIngredients = <p>Please start adding ingredients....</p>;
   }
-  console.log(transformedIngredients);
   return (
     <div className={styles.Burger}>
       <BurgerIngredient type="bread-top" />
