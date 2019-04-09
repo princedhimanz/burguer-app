@@ -7,11 +7,9 @@ const BuildControl = ({ label, added, removed, disabled }) => {
   return (
     <div className={styles.BuildControl}>
       <div className={styles.Label}>{label}</div>
-      {disabled ? null : (
-        <button className={styles.Less} onClick={removed}>
-          Less
-        </button>
-      )}
+      <button className={styles.Less} onClick={removed} disabled={disabled}>
+        Less
+      </button>
       <button className={styles.More} onClick={added}>
         More
       </button>
