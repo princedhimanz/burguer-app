@@ -6,13 +6,21 @@ import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
 const Burger = ({ ingredients }) => {
   // Take the object, and transform into an array with the name of the ingredients
-  const transformedIngredients = Object.keys(ingredients).map(igName => {
-    // Then map over that array of ingredients, and on each one return an array with the size of the amount of ingredients from the object received. We then have an array, with arrays inside, each array with the length of each ingredient received.
-    return [...Array(ingredients[igName])].map((_, i) => {
-      // We then map over that array, and return the BurgerIngredient component for each one
-      return <BurgerIngredient key={igName + i} type={igName} />;
-    });
-  });
+  let transformedIngredients = Object.keys(ingredients)
+    .map(igName => {
+      // Then map over that array of ingredients, and on each one return an array with the size of the amount of ingredients from the object received. We then have an array, with arrays inside, each array with the length of each ingredient received.
+      return [...Array(ingredients[igName])].map((_, i) => {
+        // We then map over that array, and return the BurgerIngredient component for each one
+        return <BurgerIngredient key={igName + i} type={igName} />;
+      });
+    })
+    .reduce((prev, curr) => {
+      return prev.concat(curr);
+    }, []);
+  if (transformedIngredients.length === 0) {
+    transformedIngredients = <p>Please start adding ingredients....</p>;
+  }
+  console.log(transformedIngredients);
   return (
     <div className={styles.Burger}>
       <BurgerIngredient type="bread-top" />
