@@ -17,6 +17,7 @@ const BuildControls = ({
   disabled,
   totalPrice,
   purchasable,
+  ordered,
 }) => {
   return (
     <div className={styles.BuildControls}>
@@ -32,7 +33,11 @@ const BuildControls = ({
           disabled={disabled[ctrl.type]}
         />
       ))}
-      <button className={styles.OrderButton} disabled={!purchasable}>
+      <button
+        className={styles.OrderButton}
+        disabled={!purchasable}
+        onClick={ordered}
+      >
         ORDER NOW
       </button>
     </div>
@@ -45,6 +50,7 @@ BuildControls.propTypes = {
   disabled: PropTypes.object.isRequired,
   totalPrice: PropTypes.number.isRequired,
   purchasable: PropTypes.bool.isRequired,
+  ordered: PropTypes.func.isRequired,
 };
 
 export default BuildControls;

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -19,6 +21,7 @@ const BurguerBuilder = props => {
   });
   const [totalPrice, setTotalPrice] = useState(0);
   const [purchasable, setPurchasable] = useState(false);
+  const [purchasing, setPurchasing] = useState(false);
 
   // If ingredient count is 0, put ingredient disabled to true
   const disableInfo = { ...ingredients };
@@ -26,7 +29,7 @@ const BurguerBuilder = props => {
     disableInfo[key] = disableInfo[key] <= 0;
   }
 
-  const updatePurchaseState = ingredients => {
+  function updatePurchaseState(ingredients) {
     const sum = Object.keys(ingredients)
       .map(igName => {
         return ingredients[igName];
@@ -35,9 +38,9 @@ const BurguerBuilder = props => {
         return prev + curr;
       }, 0);
     setPurchasable(sum > 0);
-  };
+  }
 
-  const addIngredientHandler = type => {
+  function addIngredientHandler(type) {
     const updatedIngredients = { ...ingredients };
     updatedIngredients[type] = ingredients[type] + 1;
     setIngredients(updatedIngredients);
@@ -47,9 +50,9 @@ const BurguerBuilder = props => {
     setTotalPrice(newPrice);
 
     updatePurchaseState(updatedIngredients);
-  };
+  }
 
-  const removeIngredientHandler = type => {
+  function removeIngredientHandler(type) {
     if (ingredients[type] === 0) return;
     const updatedIngredients = { ...ingredients };
     updatedIngredients[type] = ingredients[type] - 1;
@@ -60,16 +63,24 @@ const BurguerBuilder = props => {
     setTotalPrice(newPrice);
 
     updatePurchaseState(updatedIngredients);
-  };
+  }
+
+  function purchaseHandler() {
+    setPurchasing(true);
+  }
 
   return (
     <React.Fragment>
+      <Modal show={purchasing}>
+        <OrderSummary ingredients={ingredients} />
+      </Modal>
       <Burger ingredients={ingredients} />
       <BuildControls
         ingredientAdded={addIngredientHandler}
         ingredientRemoved={removeIngredientHandler}
         disabled={disableInfo}
         totalPrice={totalPrice}
+        ordered={purchaseHandler}
         purchasable={purchasable}
       />
     </React.Fragment>
