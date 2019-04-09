@@ -18,6 +18,10 @@ const BurguerBuilder = props => {
     meat: 0,
   });
   const [totalPrice, setTotalPrice] = useState(0);
+  const disableInfo = { ...ingredients };
+  for (let key in disableInfo) {
+    disableInfo[key] = disableInfo[key] <= 0;
+  }
 
   const addIngredientHandler = type => {
     const updatedIngredients = { ...ingredients };
@@ -30,6 +34,7 @@ const BurguerBuilder = props => {
   };
 
   const removeIngredientHandler = type => {
+    if (ingredients[type] === 0) return;
     const updatedIngredients = { ...ingredients };
     updatedIngredients[type] = ingredients[type] - 1;
     setIngredients(updatedIngredients);
@@ -45,6 +50,7 @@ const BurguerBuilder = props => {
       <BuildControls
         ingredientAdded={addIngredientHandler}
         ingredientRemoved={removeIngredientHandler}
+        disabled={disableInfo}
       />
     </React.Fragment>
   );

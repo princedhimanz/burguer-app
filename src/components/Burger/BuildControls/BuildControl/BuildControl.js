@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 
 import styles from './BuildControl.module.css';
 
-const BuildControl = ({ label, added, removed }) => {
+const BuildControl = ({ label, added, removed, disabled }) => {
   return (
     <div className={styles.BuildControl}>
       <div className={styles.Label}>{label}</div>
-      <button className={styles.Less} onClick={removed}>
-        Less
-      </button>
+      {disabled ? null : (
+        <button className={styles.Less} onClick={removed}>
+          Less
+        </button>
+      )}
       <button className={styles.More} onClick={added}>
         More
       </button>
