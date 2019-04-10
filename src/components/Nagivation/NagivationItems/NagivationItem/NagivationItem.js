@@ -16,7 +16,7 @@ const NagivationItem = ({ link, active, children }) => {
 NagivationItem.propTypes = {
   link: PropTypes.string.isRequired,
   active: PropTypes.bool,
-  children: PropTypes.array.isRequired,
+  children: PropTypes.any.isRequired,
 };
 
 export default NagivationItem;
