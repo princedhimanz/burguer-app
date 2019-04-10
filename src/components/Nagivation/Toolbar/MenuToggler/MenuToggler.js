@@ -1,8 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import styles from './MenuToggler.module.css';
+
 const MenuToggler = ({ clicked }) => {
-  return <div onClick={clicked}>Menu</div>;
+  return (
+    <div className={styles.MenuToggler} onClick={clicked}>
+      <div />
+      <div />
+      <div />
+    </div>
+  );
 };
 
 MenuToggler.propTypes = {

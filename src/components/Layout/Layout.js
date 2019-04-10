@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
   }
 
   function sideDrawerToggler() {
-    setshowSideDrawer(true);
+    setshowSideDrawer(!showSideDrawer);
   }
 
   return (
