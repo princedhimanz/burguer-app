@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const OrderSummary = ({ ingredients }) => {
+import Button from '../../UI/Button/Button';
+
+const OrderSummary = ({ ingredients, purchaseCanceled, purchaseContinued }) => {
   const ingredientSummary = Object.keys(ingredients).map(igName => {
     return (
       <li key={igName}>
@@ -16,12 +18,20 @@ const OrderSummary = ({ ingredients }) => {
       <p>A delicious burget with the following ingredients:</p>
       <ul>{ingredientSummary}</ul>
       <p>Continue to checkout?</p>
+      <Button btnType="Danger" clicked={purchaseCanceled}>
+        CANCEL
+      </Button>
+      <Button btnType="Success" clicked={purchaseContinued}>
+        CONTINUE
+      </Button>
     </React.Fragment>
   );
 };
 
 OrderSummary.propTypes = {
   ingredients: PropTypes.object.isRequired,
+  purchaseCanceled: PropTypes.func.isRequired,
+  purchaseContinued: PropTypes.func.isRequired,
 };
 
 export default OrderSummary;

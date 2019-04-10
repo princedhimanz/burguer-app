@@ -73,10 +73,18 @@ const BurguerBuilder = props => {
     setPurchasing(false);
   }
 
+  function purchaseContinueHandler() {
+    alert('You will continue');
+  }
+
   return (
     <React.Fragment>
       <Modal show={purchasing} modalClosed={purchaseCancelHandler}>
-        <OrderSummary ingredients={ingredients} />
+        <OrderSummary
+          purchaseCanceled={purchaseCancelHandler}
+          purchaseContinued={purchaseContinueHandler}
+          ingredients={ingredients}
+        />
       </Modal>
       <Burger ingredients={ingredients} />
       <BuildControls
