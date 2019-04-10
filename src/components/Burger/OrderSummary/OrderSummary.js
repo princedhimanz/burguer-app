@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 
 import Button from '../../UI/Button/Button';
 
-const OrderSummary = ({ ingredients, purchaseCanceled, purchaseContinued }) => {
+const OrderSummary = ({
+  ingredients,
+  purchaseCanceled,
+  purchaseContinued,
+  price,
+}) => {
   const ingredientSummary = Object.keys(ingredients).map(igName => {
     return (
       <li key={igName}>
@@ -17,6 +22,9 @@ const OrderSummary = ({ ingredients, purchaseCanceled, purchaseContinued }) => {
       <h3>Your oder</h3>
       <p>A delicious burget with the following ingredients:</p>
       <ul>{ingredientSummary}</ul>
+      <p>
+        <strong>Total Price: {price.toFixed(2)}</strong>
+      </p>
       <p>Continue to checkout?</p>
       <Button btnType="Danger" clicked={purchaseCanceled}>
         CANCEL
@@ -32,6 +40,7 @@ OrderSummary.propTypes = {
   ingredients: PropTypes.object.isRequired,
   purchaseCanceled: PropTypes.func.isRequired,
   purchaseContinued: PropTypes.func.isRequired,
+  price: PropTypes.number.isRequired,
 };
 
 export default OrderSummary;

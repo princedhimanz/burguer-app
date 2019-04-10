@@ -84,6 +84,7 @@ const BurguerBuilder = props => {
           purchaseCanceled={purchaseCancelHandler}
           purchaseContinued={purchaseContinueHandler}
           ingredients={ingredients}
+          price={totalPrice}
         />
       </Modal>
       <Burger ingredients={ingredients} />
