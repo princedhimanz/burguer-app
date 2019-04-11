@@ -26,7 +26,7 @@ const BurguerBuilder = props => {
   useEffect(() => {
     const getIngredients = async () => {
       try {
-        const res = await axiosOrders.get('/ingredients');
+        const res = await axiosOrders.get('/ingredients.json');
         setIngredients(res.data);
       } catch (err) {
         setError(true);
@@ -140,6 +140,8 @@ const BurguerBuilder = props => {
             purchasable={purchasable}
           />
         </React.Fragment>
+      ) : error ? (
+        <p>There was an error loading ingredients</p>
       ) : (
         <Spinner />
       )}
