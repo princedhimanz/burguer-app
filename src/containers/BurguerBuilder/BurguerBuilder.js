@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import axiosOrders from '../../axios-orders';
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -13,15 +16,25 @@ const INGREDIENT_PRICES = {
 };
 
 const BurguerBuilder = props => {
-  const [ingredients, setIngredients] = useState({
-    salad: 0,
-    bacon: 0,
-    cheese: 0,
-    meat: 0,
-  });
+  const [ingredients, setIngredients] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
   const [purchasable, setPurchasable] = useState(false);
   const [purchasing, setPurchasing] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const getIngredients = async () => {
+      try {
+        const res = await axiosOrders.get('/ingredients');
+        setIngredients(res.data);
+      } catch (err) {
+        setError(true);
+        console.log(err);
+      }
+    };
+    getIngredients();
+  }, []);
 
   // If ingredient count is 0, put ingredient disabled to true
   const disableInfo = { ...ingredients };
@@ -73,31 +86,65 @@ const BurguerBuilder = props => {
     setPurchasing(false);
   }
 
-  function purchaseContinueHandler() {
-    alert('You will continue');
-  }
+  const purchaseContinueHandler = async () => {
+    // alert('You will continue');
+    setisLoading(true);
+    console.log(isLoading); // this is returning false even tho i set it to true?
+    const order = {
+      ingredients,
+      totalPrice,
+      customer: {
+        name: 'Fidalgo',
+        address: {
+          street: 'Babushka street',
+          zip: '23131',
+          country: 'Portugal',
+        },
+        email: 'hello@fidalgo.dev',
+      },
+      deliveryMethod: 'fast',
+    };
+    try {
+      const res = await axiosOrders.post('/orders.json', order);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+    setisLoading(false);
+    setPurchasing(false);
+  };
 
   return (
     <React.Fragment>
       <Modal show={purchasing} modalClosed={purchaseCancelHandler}>
-        <OrderSummary
-          purchaseCanceled={purchaseCancelHandler}
-          purchaseContinued={purchaseContinueHandler}
-          ingredients={ingredients}
-          price={totalPrice}
-        />
+        {isLoading ? (
+          <Spinner />
+        ) : ingredients ? (
+          <OrderSummary
+            purchaseCanceled={purchaseCancelHandler}
+            purchaseContinued={purchaseContinueHandler}
+            ingredients={ingredients}
+            price={totalPrice}
+          />
+        ) : null}
       </Modal>
-      <Burger ingredients={ingredients} />
-      <BuildControls
-        ingredientAdded={addIngredientHandler}
-        ingredientRemoved={removeIngredientHandler}
-        disabled={disableInfo}
-        totalPrice={totalPrice}
-        ordered={purchaseHandler}
-        purchasable={purchasable}
-      />
+      {ingredients ? (
+        <React.Fragment>
+          <Burger ingredients={ingredients} />
+          <BuildControls
+            ingredientAdded={addIngredientHandler}
+            ingredientRemoved={removeIngredientHandler}
+            disabled={disableInfo}
+            totalPrice={totalPrice}
+            ordered={purchaseHandler}
+            purchasable={purchasable}
+          />
+        </React.Fragment>
+      ) : (
+        <Spinner />
+      )}
     </React.Fragment>
   );
 };
 
-export default BurguerBuilder;
+export default withErrorHandler(BurguerBuilder, axiosOrders);

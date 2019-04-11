@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import styles from './Modal.module.css';
 import BackDrop from '../BackDrop/BackDrop';
@@ -22,13 +21,10 @@ const Modal = React.memo(
     );
   },
   (prevProp, newProp) => {
-    return prevProp.show === newProp.show;
+    return (
+      prevProp.show === newProp.show || prevProp.children === newProp.children
+    );
   }
 );
-
-Modal.propTypes = {
-  show: PropTypes.bool.isRequired,
-  modalClosed: PropTypes.func.isRequired,
-};
 
 export default Modal;

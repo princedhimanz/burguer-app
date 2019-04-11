@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './Layout.module.css';
-import Toolbar from '../Nagivation/Toolbar/Toolbar';
-import SideDrawer from '../Nagivation/SideDrawer/SideDrawer';
+import Toolbar from '../../components/Nagivation/Toolbar/Toolbar';
+import SideDrawer from '../../components/Nagivation/SideDrawer/SideDrawer';
 
 const Layout = ({ children }) => {
   const [showSideDrawer, setshowSideDrawer] = useState(false);
