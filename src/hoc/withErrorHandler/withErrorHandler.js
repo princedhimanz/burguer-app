@@ -19,7 +19,6 @@ const withErrorHandler = (WrappedComponent, axios) => {
 
     useEffect(() => {
       return () => {
-        console.log('unmounted');
         axios.interceptors.request.eject(reqInterceptor);
         axios.interceptors.request.eject(resInterceptor);
       };

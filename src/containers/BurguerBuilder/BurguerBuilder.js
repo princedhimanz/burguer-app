@@ -87,31 +87,42 @@ const BurguerBuilder = props => {
   }
 
   const purchaseContinueHandler = async () => {
-    // alert('You will continue');
-    setisLoading(true);
-    console.log(isLoading); // this is returning false even tho i set it to true?
-    const order = {
-      ingredients,
-      totalPrice,
-      customer: {
-        name: 'Fidalgo',
-        address: {
-          street: 'Babushka street',
-          zip: '23131',
-          country: 'Portugal',
-        },
-        email: 'hello@fidalgo.dev',
-      },
-      deliveryMethod: 'fast',
-    };
-    try {
-      const res = await axiosOrders.post('/orders.json', order);
-      console.log(res);
-    } catch (err) {
-      console.log(err);
+    const queryParams = [];
+    for (let i in ingredients) {
+      queryParams.push(
+        encodeURIComponent(i) + '=' + encodeURIComponent(ingredients[i])
+      );
     }
-    setisLoading(false);
-    setPurchasing(false);
+    const queryString = queryParams.join('&');
+
+    props.history.push({
+      pathname: '/checkout',
+      search: '?' + queryString,
+    });
+    // setisLoading(true);
+    // console.log(isLoading); // this is returning false even tho i set it to true?
+    // const order = {
+    //   ingredients,
+    //   totalPrice,
+    //   customer: {
+    //     name: 'Fidalgo',
+    //     address: {
+    //       street: 'Babushka street',
+    //       zip: '23131',
+    //       country: 'Portugal',
+    //     },
+    //     email: 'hello@fidalgo.dev',
+    //   },
+    //   deliveryMethod: 'fast',
+    // };
+    // try {
+    //   const res = await axiosOrders.post('/orders.json', order);
+    //   console.log(res);
+    // } catch (err) {
+    //   console.log(err);
+    // }
+    // setisLoading(false);
+    // setPurchasing(false);
   };
 
   return (
