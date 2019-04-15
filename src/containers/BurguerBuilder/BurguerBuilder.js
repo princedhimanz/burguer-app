@@ -93,36 +93,13 @@ const BurguerBuilder = props => {
         encodeURIComponent(i) + '=' + encodeURIComponent(ingredients[i])
       );
     }
+    queryParams.push('price=' + totalPrice);
     const queryString = queryParams.join('&');
 
     props.history.push({
       pathname: '/checkout',
       search: '?' + queryString,
     });
-    // setisLoading(true);
-    // console.log(isLoading); // this is returning false even tho i set it to true?
-    // const order = {
-    //   ingredients,
-    //   totalPrice,
-    //   customer: {
-    //     name: 'Fidalgo',
-    //     address: {
-    //       street: 'Babushka street',
-    //       zip: '23131',
-    //       country: 'Portugal',
-    //     },
-    //     email: 'hello@fidalgo.dev',
-    //   },
-    //   deliveryMethod: 'fast',
-    // };
-    // try {
-    //   const res = await axiosOrders.post('/orders.json', order);
-    //   console.log(res);
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    // setisLoading(false);
-    // setPurchasing(false);
   };
 
   return (
