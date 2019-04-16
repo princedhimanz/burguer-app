@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import ContactData from './ContactData/ContactData';
-import PropTypes from 'prop-types';
 
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 
@@ -54,7 +53,5 @@ class Checkout extends React.Component {
     );
   }
 }
-
-Checkout.propTypes = {};
 
 export default Checkout;

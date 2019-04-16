@@ -3,9 +3,13 @@ import PropTypes from 'prop-types';
 
 import styles from './Button.module.css';
 
-const Button = ({ btnType, clicked, children }) => {
+const Button = ({ btnType, clicked, children, disabled }) => {
   return (
-    <button className={`${styles.Button} ${styles[btnType]}`} onClick={clicked}>
+    <button
+      disabled={disabled}
+      className={`${styles.Button} ${styles[btnType]}`}
+      onClick={clicked}
+    >
       {children}
     </button>
   );
@@ -13,7 +17,7 @@ const Button = ({ btnType, clicked, children }) => {
 
 Button.propTypes = {
   btnType: PropTypes.string.isRequired,
-  clicked: PropTypes.func.isRequired,
+  clicked: PropTypes.func,
   children: PropTypes.any.isRequired,
 };
 

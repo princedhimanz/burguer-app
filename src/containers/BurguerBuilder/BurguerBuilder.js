@@ -25,6 +25,7 @@ const BurguerBuilder = props => {
 
   useEffect(() => {
     const getIngredients = async () => {
+      setisLoading(true);
       try {
         const res = await axiosOrders.get('/ingredients.json');
         setIngredients(res.data);
@@ -32,6 +33,7 @@ const BurguerBuilder = props => {
         setError(true);
         console.log(err);
       }
+      setisLoading(false);
     };
     getIngredients();
   }, []);

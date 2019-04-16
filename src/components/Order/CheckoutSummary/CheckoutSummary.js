@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import styles from './CheckoutSummary.module.css';
 import Burger from '../../Burger/Burger';
@@ -25,7 +24,5 @@ const CheckoutSummary = ({
     </div>
   );
 };
-
-CheckoutSummary.propTypes = {};
 
 export default CheckoutSummary;
