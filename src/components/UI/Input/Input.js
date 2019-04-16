@@ -2,14 +2,28 @@ import React, { useState } from 'react';
 
 import stlyes from './Input.module.css';
 
-const Input = ({ label, elementType, elementConfig, value, changed }) => {
+const Input = ({
+  label,
+  elementType,
+  elementConfig,
+  value,
+  changed,
+  invalid,
+  shouldValidate,
+  touched,
+}) => {
   let inputEl = null;
+
+  const inputClasses = [
+    stlyes.InputEl,
+    invalid && shouldValidate && touched ? stlyes.Invalid : null,
+  ].join(' ');
 
   switch (elementType) {
     case 'input':
       inputEl = (
         <input
-          className={stlyes.InputEl}
+          className={inputClasses}
           {...elementConfig}
           value={value}
           onChange={changed}
@@ -19,7 +33,7 @@ const Input = ({ label, elementType, elementConfig, value, changed }) => {
     case 'textarea':
       inputEl = (
         <textarea
-          className={stlyes.InputEl}
+          className={inputClasses}
           {...elementConfig}
           value={value}
           onChange={changed}
@@ -28,7 +42,7 @@ const Input = ({ label, elementType, elementConfig, value, changed }) => {
       break;
     case 'select':
       inputEl = (
-        <select className={stlyes.InputEl} value={value} onChange={changed}>
+        <select className={inputClasses} value={value} onChange={changed}>
           {elementConfig.options.map(option => (
             <option key={option.value} value={option.value}>
               {option.displayValue}
@@ -40,7 +54,9 @@ const Input = ({ label, elementType, elementConfig, value, changed }) => {
     default:
       inputEl = (
         <input
-          className={stlyes.InputEl}
+          className={`${stlyes.InputEl} ${
+            invalid && shouldValidate ? stlyes.Invalid : null
+          }`}
           {...elementConfig}
           value={value}
           onChange={changed}

@@ -22,6 +22,7 @@ const ContactData = ({ ingredients, totalPrice, history }) => {
         minLength: 3,
       },
       valid: false,
+      touched: false,
     },
     street: {
       elementType: 'input',
@@ -34,6 +35,7 @@ const ContactData = ({ ingredients, totalPrice, history }) => {
         required: true,
       },
       valid: false,
+      touched: false,
     },
     zipCode: {
       elementType: 'input',
@@ -48,6 +50,7 @@ const ContactData = ({ ingredients, totalPrice, history }) => {
         maxLength: 7,
       },
       valid: false,
+      touched: false,
     },
     country: {
       elementType: 'input',
@@ -60,6 +63,7 @@ const ContactData = ({ ingredients, totalPrice, history }) => {
         required: true,
       },
       valid: false,
+      touched: false,
     },
     email: {
       elementType: 'input',
@@ -72,6 +76,7 @@ const ContactData = ({ ingredients, totalPrice, history }) => {
         required: true,
       },
       valid: false,
+      touched: false,
     },
     deliveryMethod: {
       elementType: 'select',
@@ -92,6 +97,7 @@ const ContactData = ({ ingredients, totalPrice, history }) => {
     const updatedFormElement = {
       ...updatedData[inputId],
       value: event.target.value,
+      touched: true,
     };
     // Check if input is valid, in this case check only if its filled when required
     updatedFormElement.valid = checkValidity(
@@ -159,6 +165,9 @@ const ContactData = ({ ingredients, totalPrice, history }) => {
           elementType={formEl.config.elementType}
           elementConfig={formEl.config.elementConfig}
           value={formEl.config.value}
+          invalid={!formEl.config.valid}
+          touched={formEl.config.touched}
+          shouldValidate={formEl.config.validation}
           changed={e => handleInputChange(e, formEl.id)}
         />
       ))}
