@@ -55,20 +55,8 @@ const BurguerBuilder = props => {
     setPurchasing(false);
   }
 
-  const purchaseContinueHandler = async () => {
-    const queryParams = [];
-    for (let i in props.ings) {
-      queryParams.push(
-        encodeURIComponent(i) + '=' + encodeURIComponent(props.ings[i])
-      );
-    }
-    queryParams.push('price=' + props.totalPrice);
-    const queryString = queryParams.join('&');
-
-    props.history.push({
-      pathname: '/checkout',
-      search: '?' + queryString,
-    });
+  const purchaseContinueHandler = () => {
+    props.history.push('/checkout');
   };
 
   return (
