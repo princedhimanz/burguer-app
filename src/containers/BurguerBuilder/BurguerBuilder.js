@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { ingredientAdded, ingredientRemoved } from '../../actions';
 
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
@@ -8,38 +10,28 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axiosOrders from '../../axios-orders';
 
-const INGREDIENT_PRICES = {
-  salad: 0.5,
-  bacon: 0.7,
-  meat: 1.3,
-  cheese: 0.4,
-};
-
 const BurguerBuilder = props => {
-  const [ingredients, setIngredients] = useState(null);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [purchasable, setPurchasable] = useState(false);
   const [purchasing, setPurchasing] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  useEffect(() => {
-    const getIngredients = async () => {
-      setisLoading(true);
-      try {
-        const res = await axiosOrders.get('/ingredients.json');
-        setIngredients(res.data);
-      } catch (err) {
-        setError(true);
-        console.log(err);
-      }
-      setisLoading(false);
-    };
-    getIngredients();
-  }, []);
+  // useEffect(() => {
+  //   const getIngredients = async () => {
+  //     setisLoading(true);
+  //     try {
+  //       const res = await axiosOrders.get('/ingredients.json');
+  //       setIngredients(res.data);
+  //     } catch (err) {
+  //       setError(true);
+  //       console.log(err);
+  //     }
+  //     setisLoading(false);
+  //   };
+  //   getIngredients();
+  // }, []);
 
   // If ingredient count is 0, put ingredient disabled to true
-  const disableInfo = { ...ingredients };
+  const disableInfo = { ...props.ings };
   for (let key in disableInfo) {
     disableInfo[key] = disableInfo[key] <= 0;
   }
@@ -52,32 +44,7 @@ const BurguerBuilder = props => {
       .reduce((prev, curr) => {
         return prev + curr;
       }, 0);
-    setPurchasable(sum > 0);
-  }
-
-  function addIngredientHandler(type) {
-    const updatedIngredients = { ...ingredients };
-    updatedIngredients[type] = ingredients[type] + 1;
-    setIngredients(updatedIngredients);
-
-    const oldPrice = totalPrice;
-    const newPrice = oldPrice + INGREDIENT_PRICES[type];
-    setTotalPrice(newPrice);
-
-    updatePurchaseState(updatedIngredients);
-  }
-
-  function removeIngredientHandler(type) {
-    if (ingredients[type] === 0) return;
-    const updatedIngredients = { ...ingredients };
-    updatedIngredients[type] = ingredients[type] - 1;
-    setIngredients(updatedIngredients);
-
-    const oldPrice = totalPrice;
-    const newPrice = oldPrice - INGREDIENT_PRICES[type];
-    setTotalPrice(newPrice);
-
-    updatePurchaseState(updatedIngredients);
+    return sum > 0;
   }
 
   function purchaseHandler() {
@@ -90,12 +57,12 @@ const BurguerBuilder = props => {
 
   const purchaseContinueHandler = async () => {
     const queryParams = [];
-    for (let i in ingredients) {
+    for (let i in props.ings) {
       queryParams.push(
-        encodeURIComponent(i) + '=' + encodeURIComponent(ingredients[i])
+        encodeURIComponent(i) + '=' + encodeURIComponent(props.ings[i])
       );
     }
-    queryParams.push('price=' + totalPrice);
+    queryParams.push('price=' + props.totalPrice);
     const queryString = queryParams.join('&');
 
     props.history.push({
@@ -109,25 +76,25 @@ const BurguerBuilder = props => {
       <Modal show={purchasing} modalClosed={purchaseCancelHandler}>
         {isLoading ? (
           <Spinner />
-        ) : ingredients ? (
+        ) : props.ings ? (
           <OrderSummary
             purchaseCanceled={purchaseCancelHandler}
             purchaseContinued={purchaseContinueHandler}
-            ingredients={ingredients}
-            price={totalPrice}
+            ingredients={props.ings}
+            price={props.totalPrice}
           />
         ) : null}
       </Modal>
-      {ingredients ? (
+      {props.ings ? (
         <React.Fragment>
-          <Burger ingredients={ingredients} />
+          <Burger ingredients={props.ings} />
           <BuildControls
-            ingredientAdded={addIngredientHandler}
-            ingredientRemoved={removeIngredientHandler}
+            ingredientAdded={props.ingredientAdded}
+            ingredientRemoved={props.ingredientRemoved}
             disabled={disableInfo}
-            totalPrice={totalPrice}
+            totalPrice={props.totalPrice}
             ordered={purchaseHandler}
-            purchasable={purchasable}
+            purchasable={updatePurchaseState(props.ings)}
           />
         </React.Fragment>
       ) : error ? (
@@ -139,4 +106,14 @@ const BurguerBuilder = props => {
   );
 };
 
-export default withErrorHandler(BurguerBuilder, axiosOrders);
+const mapStateToProps = state => ({
+  ings: state.ingredients,
+  totalPrice: state.totalPrice,
+});
+
+const mapDispatchToProps = { ingredientAdded, ingredientRemoved };
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(BurguerBuilder, axiosOrders));
