@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
-import axiosOrders from '../../../axios-orders';
 import { connect } from 'react-redux';
 
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import axiosOrders from '../../../axios-orders';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
+import * as orderActions from '../../../store/actions';
 
 import styles from './ContactData.module.css';
 
-const ContactData = ({ ings, totalPrice, history }) => {
+const ContactData = ({ ings, totalPrice, onOrderBurger, loading }) => {
   const [orderForm, setOrderForm] = useState({
     name: {
       elementType: 'input',
@@ -48,7 +50,7 @@ const ContactData = ({ ings, totalPrice, history }) => {
       validation: {
         required: true,
         minLength: 4,
-        maxLength: 7,
+        maxLength: 8,
       },
       valid: false,
       touched: false,
@@ -98,7 +100,6 @@ const ContactData = ({ ings, totalPrice, history }) => {
       valid: true,
     },
   });
-  const [isLoading, setIsLoading] = useState(false);
   const [formIsValid, setFormIsValid] = useState(false);
 
   // Check validity of input. In this case only if its filled when required
@@ -149,7 +150,6 @@ const ContactData = ({ ings, totalPrice, history }) => {
 
   const orderHandler = async e => {
     e.preventDefault();
-    setIsLoading(true);
     const formData = {};
     for (let formElement in orderForm) {
       formData[formElement] = orderForm[formElement].value;
@@ -159,14 +159,7 @@ const ContactData = ({ ings, totalPrice, history }) => {
       totalPrice,
       orderData: formData,
     };
-    try {
-      const res = await axiosOrders.post('/orders.json', order);
-      console.log(res);
-    } catch (err) {
-      console.log(err);
-    }
-    setIsLoading(false);
-    history.push('/');
+    onOrderBurger(order);
   };
 
   const formElementsArray = [];
@@ -197,7 +190,7 @@ const ContactData = ({ ings, totalPrice, history }) => {
     </form>
   );
 
-  return isLoading ? (
+  return loading ? (
     <Spinner />
   ) : (
     <div className={styles.ContactData}>
@@ -207,9 +200,17 @@ const ContactData = ({ ings, totalPrice, history }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  ings: state.ingredients,
-  totalPrice: state.totalPrice,
+const mapStateToProps = ({ burgerBuilder, order }) => ({
+  ings: burgerBuilder.ingredients,
+  totalPrice: burgerBuilder.totalPrice,
+  loading: order.loading,
 });
 
-export default connect(mapStateToProps)(withRouter(ContactData));
+const mapDispatchToProps = {
+  onOrderBurger: orderActions.purchaseBurger,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(withRouter(ContactData), axiosOrders));

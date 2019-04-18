@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import ContactData from './ContactData/ContactData';
@@ -14,8 +14,12 @@ const Checkout = props => {
     props.history.replace('/checkout/contact-data');
   };
 
-  return (
-    <div>
+  return !props.ings ? (
+    <Redirect to="/" />
+  ) : props.purchased ? (
+    <Redirect to="/" />
+  ) : (
+    <React.Fragment>
       <CheckoutSummary
         ingredients={props.ings}
         checkoutCancelled={onCheckoutCancelled}
@@ -25,12 +29,13 @@ const Checkout = props => {
         path={props.match.path + '/contact-data'}
         component={ContactData}
       />
-    </div>
+    </React.Fragment>
   );
 };
 
-const mapStateToProps = state => ({
-  ings: state.ingredients,
+const mapStateToProps = ({ burgerBuilder, order }) => ({
+  ings: burgerBuilder.ingredients,
+  purchased: order.purchased,
 });
 
 export default connect(mapStateToProps)(Checkout);
