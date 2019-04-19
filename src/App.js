@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from './store/actions';
 
@@ -10,29 +10,44 @@ import Orders from './containers/Orders/Orders';
 import Auth from './containers/Auth/Auth';
 import Logout from './containers/Auth/Logout/Logout';
 
-const App = ({ authCheckState }) => {
+const App = ({ authCheckState, isAuth }) => {
+  console.log(isAuth);
   useEffect(() => {
     authCheckState();
   }, []);
 
-  return (
-    <Layout>
+  let routes = (
+    <Switch>
+      <Route path="/auth" component={Auth} />
+      <Route path="/" component={BurguerBuilder} />
+      <Redirect to="/" />
+    </Switch>
+  );
+
+  if (isAuth) {
+    routes = (
       <Switch>
         <Route path="/checkout" component={Checkout} />
         <Route path="/orders" component={Orders} />
-        <Route path="/auth" component={Auth} />
         <Route path="/logout" component={Logout} />
-        <Route path="/" exact component={BurguerBuilder} />
+        <Route path="/" component={BurguerBuilder} />
+        <Redirect to="/" />
       </Switch>
-    </Layout>
-  );
+    );
+  }
+
+  return <Layout>{routes}</Layout>;
 };
+
+const mapStateToProps = ({ auth }) => ({
+  isAuth: auth.token !== null,
+});
 
 const mapDispatchToProps = {
   authCheckState: actions.authCheckState,
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(App);
