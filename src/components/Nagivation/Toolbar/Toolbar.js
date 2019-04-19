@@ -6,7 +6,7 @@ import Logo from '../../Logo/Logo';
 import NavigationItems from '../NagivationItems/NagivationItems';
 import MenuToggler from './MenuToggler/MenuToggler';
 
-const Toolbar = ({ toggleHandler }) => {
+const Toolbar = ({ toggleHandler, isAuth }) => {
   return (
     <header className={styles.Toolbar}>
       <MenuToggler clicked={toggleHandler} />
@@ -14,7 +14,7 @@ const Toolbar = ({ toggleHandler }) => {
         <Logo />
       </div>
       <nav className={styles.DesktopOnly}>
-        <NavigationItems />
+        <NavigationItems isAuth={isAuth} />
       </nav>
     </header>
   );

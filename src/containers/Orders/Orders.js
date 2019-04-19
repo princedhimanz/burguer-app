@@ -7,9 +7,9 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import * as actions from '../../store/actions';
 
-const Orders = ({ orders, loading, getOrders }) => {
+const Orders = ({ orders, loading, getOrders, token }) => {
   useEffect(() => {
-    getOrders();
+    getOrders(token);
   }, []);
 
   return loading ? (
@@ -27,9 +27,10 @@ const Orders = ({ orders, loading, getOrders }) => {
   );
 };
 
-const mapStateToProps = ({ order }) => ({
+const mapStateToProps = ({ order, auth }) => ({
   orders: order.orders,
   loading: order.loading,
+  token: auth.token,
 });
 
 const mapDispatchToProps = { getOrders: actions.getOrders };

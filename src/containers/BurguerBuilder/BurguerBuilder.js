@@ -38,6 +38,16 @@ const BurguerBuilder = props => {
     props.history.push('/checkout');
   };
 
+  const setPurchaseHandler = () => {
+    if (props.isAuth) {
+      setPurchasing(true);
+    }
+
+    //Not authed, redirect to login
+    props.setAfterAuthRedirect('/checkout');
+    props.history.push('/auth');
+  };
+
   return props.error ? (
     <p>There was an error</p>
   ) : !props.ings ? (
@@ -58,17 +68,19 @@ const BurguerBuilder = props => {
         ingredientRemoved={props.removeIngredient}
         disabled={disableInfo}
         totalPrice={props.totalPrice}
-        ordered={() => setPurchasing(true)}
+        ordered={setPurchaseHandler}
         purchasable={updatePurchaseState(props.ings)}
+        isAuth={props.isAuth}
       />
     </React.Fragment>
   );
 };
 
-const mapStateToProps = ({ burgerBuilder }) => ({
+const mapStateToProps = ({ burgerBuilder, auth }) => ({
   ings: burgerBuilder.ingredients,
   totalPrice: burgerBuilder.totalPrice,
   error: burgerBuilder.error,
+  isAuth: auth.token !== null,
 });
 
 const mapDispatchToProps = {
@@ -76,6 +88,7 @@ const mapDispatchToProps = {
   addIngredient: actions.addIngredient,
   removeIngredient: actions.removeIngredient,
   purchaseBurgerInit: actions.purchaseBurgerInit,
+  setAfterAuthRedirect: actions.setAfterAuthRedirect,
 };
 
 export default connect(

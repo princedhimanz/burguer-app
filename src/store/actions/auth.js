@@ -16,9 +16,24 @@ const authFail = error => ({
   payload: error,
 });
 
+export const logout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('expirationDate');
+  localStorage.removeItem('localId');
+  return { type: actionTypes.AUTH_LOGOUT };
+};
+
+// Function that will be executed when user logins/registers, that will run after the expiration time, to logout the user when the token expires, so we dont try to send an invalid token to a protected route
+const checkAuthTimeout = expirationTime => async dispatch => {
+  console.log('got here');
+  console.log(expirationTime);
+  setTimeout(() => {
+    dispatch(logout());
+  }, expirationTime * 1000);
+};
+
 export const auth = (email, password, isSignUp) => async dispatch => {
   dispatch(authStart());
-  console.log(isSignUp);
   const authData = {
     email,
     password,
@@ -30,9 +45,46 @@ export const auth = (email, password, isSignUp) => async dispatch => {
 
   try {
     const res = await axios.post(url, authData);
-    console.log(res.data);
+    const expirationDate = new Date(
+      new Date().getTime() + res.data.expiresIn * 1000
+    );
+    localStorage.setItem('token', res.data.idToken);
+    localStorage.setItem('expirationDate', expirationDate);
+    localStorage.setItem('localId', res.data.localId);
     dispatch(authSuccess(res.data));
+    dispatch(checkAuthTimeout(res.data.expiresIn));
   } catch (err) {
     dispatch(authFail(err.response.data.error));
+  }
+};
+
+export const setAfterAuthRedirect = path => ({
+  type: actionTypes.SET_AFTER_AUTH_REDIRECT,
+  payload: path,
+});
+
+export const authCheckState = () => dispatch => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    dispatch(logout());
+  } else {
+    const expirationDate = new Date(localStorage.getItem('expirationDate'));
+    if (expirationDate <= new Date()) {
+      dispatch(logout());
+    } else {
+      const localId = localStorage.getItem('localId');
+      dispatch(
+        authSuccess({
+          idToken: token,
+          localId: localId,
+          expiresIn: expirationDate,
+        })
+      );
+      dispatch(
+        checkAuthTimeout(
+          (expirationDate.getTime() - new Date().getTime()) / 1000
+        )
+      );
+    }
   }
 };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Input from '../../components/UI/Input/Input';
@@ -40,7 +41,13 @@ const Auth = props => {
     },
   });
 
-  const [isSignUp, setIsSignUp] = useState(true);
+  const [isSignUp, setIsSignUp] = useState(false);
+
+  useEffect(() => {
+    console.log(props.afterAuthRedirect);
+    if (!props.buildingBurger && props.afterAuthRedirect !== '/')
+      props.setAfterAuthRedirect('/');
+  }, []);
 
   // Check validity of input. In this case only if its filled when required
   // Start with true, and on every rule we check if the condition is true, and if isValid is already true
@@ -129,6 +136,8 @@ const Auth = props => {
 
   return props.loading ? (
     <Spinner />
+  ) : props.isAuth ? (
+    <Redirect to={props.afterAuthRedirect} />
   ) : (
     <div className={styles.Auth}>
       {errorMessage}
@@ -140,13 +149,17 @@ const Auth = props => {
   );
 };
 
-const mapStateToProps = ({ auth }) => ({
+const mapStateToProps = ({ auth, burgerBuilder }) => ({
   loading: auth.loading,
   error: auth.error,
+  isAuth: auth.token !== null,
+  buildingBurger: burgerBuilder.building,
+  afterAuthRedirect: auth.afterAuthRedirect,
 });
 
 const mapDispatchToProps = {
   auth: actions.auth,
+  setAfterAuthRedirect: actions.setAfterAuthRedirect,
 };
 
 export default connect(

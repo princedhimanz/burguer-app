@@ -6,7 +6,7 @@ import Logo from '../../Logo/Logo';
 import NavigationItems from '../NagivationItems/NagivationItems';
 import BackDrop from '../../UI/BackDrop/BackDrop';
 
-const SideDrawer = ({ close, opened }) => {
+const SideDrawer = ({ close, opened, isAuth }) => {
   return (
     <React.Fragment>
       <BackDrop show={opened} clicked={close} />
@@ -19,7 +19,7 @@ const SideDrawer = ({ close, opened }) => {
           <Logo />
         </div>
         <nav>
-          <NavigationItems />
+          <NavigationItems isAuth={isAuth} />
         </nav>
       </div>
     </React.Fragment>

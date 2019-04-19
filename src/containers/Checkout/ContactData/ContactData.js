@@ -11,7 +11,7 @@ import * as orderActions from '../../../store/actions';
 
 import styles from './ContactData.module.css';
 
-const ContactData = ({ ings, totalPrice, onOrderBurger, loading }) => {
+const ContactData = ({ ings, totalPrice, onOrderBurger, token, loading }) => {
   const [orderForm, setOrderForm] = useState({
     name: {
       elementType: 'input',
@@ -168,7 +168,7 @@ const ContactData = ({ ings, totalPrice, onOrderBurger, loading }) => {
       totalPrice,
       orderData: formData,
     };
-    onOrderBurger(order);
+    onOrderBurger(order, token);
   };
 
   const formElementsArray = [];
@@ -209,10 +209,11 @@ const ContactData = ({ ings, totalPrice, onOrderBurger, loading }) => {
   );
 };
 
-const mapStateToProps = ({ burgerBuilder, order }) => ({
+const mapStateToProps = ({ burgerBuilder, order, auth }) => ({
   ings: burgerBuilder.ingredients,
   totalPrice: burgerBuilder.totalPrice,
   loading: order.loading,
+  token: auth.token,
 });
 
 const mapDispatchToProps = {

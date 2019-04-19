@@ -11,4 +11,4 @@ export {
   getOrdersInit,
 } from './order';
 
-export { auth } from './auth';
+export { auth, logout, setAfterAuthRedirect, authCheckState } from './auth';

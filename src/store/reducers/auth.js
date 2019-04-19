@@ -6,6 +6,7 @@ const initialState = {
   userId: null,
   error: null,
   loading: false,
+  afterAuthRedirect: '/',
 };
 
 const authStart = state => updateObject(state, { error: null, loading: true });
@@ -21,6 +22,11 @@ const authSuccess = (state, payload) =>
 const authFail = (state, payload) =>
   updateObject(state, { error: payload, loading: false });
 
+const authLogout = state => updateObject(state, { token: null, userId: null });
+
+const setAfterAuthRedirect = (state, payload) =>
+  updateObject(state, { afterAuthRedirect: payload });
+
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case actionTypes.AUTH_START:
@@ -29,6 +35,10 @@ export default (state = initialState, { type, payload }) => {
       return authSuccess(state, payload);
     case actionTypes.AUTH_FAIL:
       return authFail(state, payload);
+    case actionTypes.AUTH_LOGOUT:
+      return authLogout(state);
+    case actionTypes.SET_AFTER_AUTH_REDIRECT:
+      return setAfterAuthRedirect(state, payload);
 
     default:
       return state;
