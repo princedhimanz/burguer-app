@@ -45,13 +45,13 @@ const BuildControls = ({
   );
 };
 
-BuildControls.propTypes = {
-  ingredientAdded: PropTypes.func.isRequired,
-  ingredientRemoved: PropTypes.func.isRequired,
-  disabled: PropTypes.object.isRequired,
-  totalPrice: PropTypes.number.isRequired,
-  purchasable: PropTypes.bool.isRequired,
-  ordered: PropTypes.func.isRequired,
-};
+// BuildControls.propTypes = {
+//   ingredientAdded: PropTypes.func.isRequired,
+//   ingredientRemoved: PropTypes.func.isRequired,
+//   disabled: PropTypes.object.isRequired,
+//   totalPrice: PropTypes.number.isRequired,
+//   purchasable: PropTypes.bool.isRequired,
+//   ordered: PropTypes.func.isRequired,
+// };
 
 export default BuildControls;

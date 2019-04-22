@@ -10,7 +10,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axiosOrders from '../../axios-orders';
 
-const BurguerBuilder = props => {
+export const BurguerBuilder = props => {
   const [purchasing, setPurchasing] = useState(false);
   useEffect(() => {
     props.getIngredients();

@@ -36,11 +36,11 @@ const OrderSummary = ({
   );
 };
 
-OrderSummary.propTypes = {
-  ingredients: PropTypes.object.isRequired,
-  purchaseCanceled: PropTypes.func.isRequired,
-  purchaseContinued: PropTypes.func.isRequired,
-  price: PropTypes.number.isRequired,
-};
+// OrderSummary.propTypes = {
+//   ingredients: PropTypes.object.isRequired,
+//   purchaseCanceled: PropTypes.func.isRequired,
+//   purchaseContinued: PropTypes.func.isRequired,
+//   price: PropTypes.number.isRequired,
+// };
 
 export default OrderSummary;
