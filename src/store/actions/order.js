@@ -53,7 +53,6 @@ const getOrdersFail = error => ({
 });
 
 export const getOrders = (token, userId) => async dispatch => {
-  console.log(userId);
   try {
     dispatch(getOrdersStart());
     const queryParams = `?auth=${token}&orderBy="userId"&equalTo="${userId}"`;
