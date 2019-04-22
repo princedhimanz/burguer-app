@@ -6,6 +6,7 @@ import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import * as actions from '../../store/actions';
+import { updateObject } from '../../shared/utility';
 
 import styles from './Auth.module.css';
 
@@ -44,7 +45,6 @@ const Auth = props => {
   const [isSignUp, setIsSignUp] = useState(false);
 
   useEffect(() => {
-    console.log(props.afterAuthRedirect);
     if (!props.buildingBurger && props.afterAuthRedirect !== '/')
       props.setAfterAuthRedirect('/');
   }, []);
@@ -87,15 +87,14 @@ const Auth = props => {
 
   // When input change, make a copy of the formdata, then make a deep copy of form element, then change value of that form element, and then update the form copy data on that form element position. Only then update state
   function handleInputChange(event, inputId) {
-    const updatedData = {
-      ...formData,
-      [inputId]: {
-        ...formData[inputId],
+    const updatedData = updateObject(formData, {
+      [inputId]: updateObject(formData[inputId], {
         value: event.target.value,
         valid: checkValidity(event.target.value, formData[inputId].validation),
         touched: true,
-      },
-    };
+      }),
+    });
+
     setFormData(updatedData);
   }
 

@@ -8,6 +8,7 @@ import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import * as orderActions from '../../../store/actions';
+import { updateObject } from '../../../shared/utility';
 
 import styles from './ContactData.module.css';
 
@@ -140,20 +141,15 @@ const ContactData = ({
 
   // When input change, make a copy of the formdata, then make a deep copy of form element, then change value of that form element, and then update the form copy data on that form element position. Only then update state
   function handleInputChange(event, inputId) {
-    const updatedData = {
-      ...orderForm,
-    };
-    const updatedFormElement = {
-      ...updatedData[inputId],
+    const updatedFormElement = updateObject(orderForm[inputId], {
       value: event.target.value,
       touched: true,
-    };
-    // Check if input is valid, in this case check only if its filled when required
-    updatedFormElement.valid = checkValidity(
-      updatedFormElement.value,
-      updatedFormElement.validation
-    );
-    updatedData[inputId] = updatedFormElement;
+      valid: checkValidity(event.target.value, orderForm[inputId].validation),
+    });
+
+    const updatedData = updateObject(orderForm, {
+      [inputId]: updatedFormElement,
+    });
 
     // Check if all forms are valid to set formIsValidState
     let formIsValidCheck = true;

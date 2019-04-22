@@ -4,9 +4,9 @@ import { NavLink } from 'react-router-dom';
 
 import styles from './NagivationItem.module.css';
 
-const NagivationItem = ({ link, children }) => {
+const NagivationItem = ({ link, children, close }) => {
   return (
-    <li className={styles.NagivationItem}>
+    <li className={styles.NagivationItem} onClick={close}>
       <NavLink exact activeClassName={styles.active} to={link}>
         {children}
       </NavLink>

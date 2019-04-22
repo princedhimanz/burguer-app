@@ -3,14 +3,24 @@ import React from 'react';
 import styles from './NagivationItems.module.css';
 import NagivationItem from './NagivationItem/NagivationItem';
 
-const NagivationItems = ({ isAuth }) => (
+const NagivationItems = ({ isAuth, close }) => (
   <ul className={styles.NagivationItems}>
-    <NagivationItem link="/">Burger Builder</NagivationItem>
-    {isAuth ? <NagivationItem link="/orders">Orders</NagivationItem> : null}
+    <NagivationItem close={close} link="/">
+      Burger Builder
+    </NagivationItem>
     {isAuth ? (
-      <NagivationItem link="/logout">Logout</NagivationItem>
+      <NagivationItem close={close} link="/orders">
+        Orders
+      </NagivationItem>
+    ) : null}
+    {isAuth ? (
+      <NagivationItem close={close} link="/logout">
+        Logout
+      </NagivationItem>
     ) : (
-      <NagivationItem link="/auth">Login</NagivationItem>
+      <NagivationItem close={close} link="/auth">
+        Login
+      </NagivationItem>
     )}
   </ul>
 );

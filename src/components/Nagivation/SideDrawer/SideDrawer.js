@@ -19,7 +19,7 @@ const SideDrawer = ({ close, opened, isAuth }) => {
           <Logo />
         </div>
         <nav>
-          <NavigationItems isAuth={isAuth} />
+          <NavigationItems close={close} isAuth={isAuth} />
         </nav>
       </div>
     </React.Fragment>

@@ -25,8 +25,6 @@ export const logout = () => {
 
 // Function that will be executed when user logins/registers, that will run after the expiration time, to logout the user when the token expires, so we dont try to send an invalid token to a protected route
 const checkAuthTimeout = expirationTime => async dispatch => {
-  console.log('got here');
-  console.log(expirationTime);
   setTimeout(() => {
     dispatch(logout());
   }, expirationTime * 1000);
