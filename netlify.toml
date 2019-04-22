@@ -1,0 +1,4 @@
+[build]
+base = "05_burguer_project/"
+publish = "05_burguer_project/build/"
+command = "npm build"
